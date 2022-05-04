@@ -50,7 +50,7 @@ export const Period = styled.Text`
   font-size: ${RFValue(10)}px;
   font-family: ${({ theme }) => theme.fonts.secondary_500};
 
-  color: ${({ theme }) => theme.colors.title};
+  color: ${({ theme }) => theme.colors.text_detail};
 
   text-transform: uppercase;
 `;
@@ -62,7 +62,9 @@ export const Price = styled.Text`
   color: ${({ theme }) => theme.colors.main};
 `;
 
-export const Type = styled.View``;
+export const Type = styled.View`
+  margin-top: ${RFValue(10)}px;
+`;
 
 export const CarImage = styled.Image`
   width: ${RFValue(167)}px;
