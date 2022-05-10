@@ -32,6 +32,11 @@ import {
   DateInfo,
   DateTitle,
   DateValue,
+  RentalPrice,
+  RentalPriceLabel,
+  RentalPriceDetails,
+  RentalPriceQuota,
+  RentalPriceTotal,
 } from './styles';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
@@ -86,10 +91,21 @@ export function SchedulingDetails() {
             color={theme.colors.text}
           />
           <DateInfo>
-            <DateTitle>De</DateTitle>
+            <DateTitle>Até</DateTitle>
             <DateValue>18/06/2021</DateValue>
           </DateInfo>
         </RentalPeriod>
+        <RentalPrice>
+          <RentalPriceLabel>Total</RentalPriceLabel>
+          <RentalPriceDetails>
+            <RentalPriceQuota>
+              R$ 580 x3 diárias
+            </RentalPriceQuota>
+            <RentalPriceTotal>
+              R$ 2.900
+            </RentalPriceTotal>
+          </RentalPriceDetails>
+        </RentalPrice>
       </Content>
       <Footer>
         <Button title="Confirmar" onPress={() => { }} />
