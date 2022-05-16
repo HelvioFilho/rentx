@@ -15,6 +15,7 @@ import {
 } from './styles';
 import { api } from '../../services/api';
 import { CarDTO } from '../../dtos/CarDTO';
+import { Load } from '../../components/Load';
 
 export function Home() {
   const [cars, setCars] = useState<CarDTO[]>([]);
@@ -69,13 +70,17 @@ export function Home() {
           </TotalCars>
         </HeaderContent>
       </Header>
-      <CarList
-        data={cars}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <Car data={item} onPress={handleCarDetails} />
-        )}
-      />
+      {loading ?
+        <Load />
+        :
+        <CarList
+          data={cars}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => (
+            <Car data={item} onPress={handleCarDetails} />
+          )}
+        />
+      }
     </Container>
   );
 }
