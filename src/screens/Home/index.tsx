@@ -5,6 +5,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 
 import Logo from '../../assets/logo.svg';
 import { Car } from '../../components/Car';
+import { Load } from '../../components/Load';
 
 import {
   Container,
@@ -15,26 +16,24 @@ import {
 } from './styles';
 import { api } from '../../services/api';
 import { CarDTO } from '../../dtos/CarDTO';
-import { Load } from '../../components/Load';
+
+type NavigateParamList = {
+  navigate: (
+    screen: string,
+    carObject: {
+      car: CarDTO;
+    }
+  ) => void
+};
 
 export function Home() {
   const [cars, setCars] = useState<CarDTO[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const { navigate } = useNavigation();
+  const { navigate } = useNavigation<NavigateParamList>();
 
-  const car = {
-    brand: 'Audi',
-    name: 'RS 5 Coupé',
-    rent: {
-      period: 'ao dia',
-      price: 120,
-    },
-    thumbnail: 'https://cdn.wheel-size.com/automobile/body/audi-rs5-2020-2022-1613028936.4473815.png',
-  }
-
-  function handleCarDetails() {
-    navigate('CarDetails');
+  function handleCarDetails(car: CarDTO) {
+    navigate('CarDetails', { car });
   }
 
   useEffect(() => {
@@ -77,7 +76,7 @@ export function Home() {
           data={cars}
           keyExtractor={item => item.id}
           renderItem={({ item }) => (
-            <Car data={item} onPress={handleCarDetails} />
+            <Car data={item} onPress={() => handleCarDetails(item)} />
           )}
         />
       }
