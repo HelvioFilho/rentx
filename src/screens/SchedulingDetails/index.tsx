@@ -44,16 +44,20 @@ import { useNavigation } from '@react-navigation/native';
 
 export function SchedulingDetails() {
   const theme = useTheme();
-  const { navigate } = useNavigation();
+  const { navigate, goBack } = useNavigation();
 
   function handleConfirmRental() {
     navigate('SchedulingComplete');
   }
 
+  function handleGoBack() {
+    goBack();
+  }
+
   return (
     <Container>
       <Header>
-        <BackButton onPress={() => { }} />
+        <BackButton onPress={handleGoBack} />
       </Header>
       <CarImages>
         <ImageSlider imagesUrl={['https://cdn.wheel-size.com/automobile/body/audi-rs5-2020-2022-1613028936.4473815.png']} />

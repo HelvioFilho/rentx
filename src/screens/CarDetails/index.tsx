@@ -29,13 +29,24 @@ interface Params {
   car: CarDTO
 }
 
+interface NavigateParamList {
+  navigate: (
+    screen: string,
+    carObject: {
+      car: CarDTO;
+    }
+  ) => void;
+  goBack(): void;
+};
+
+
 export function CarDetails() {
-  const { navigate, goBack } = useNavigation();
+  const { navigate, goBack } = useNavigation<NavigateParamList>();
   const route = useRoute();
   const { car } = route.params as Params;
 
   function handleConfirmRental() {
-    navigate('Scheduling');
+    navigate('Scheduling', { car });
   }
 
   function handleGoBack() {
