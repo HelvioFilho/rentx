@@ -23,7 +23,7 @@ import { useTheme } from 'styled-components';
 type NavigateParamList = {
   navigate: (
     screen: string,
-    carObject: {
+    carObject?: {
       car: CarDTO;
     }
   ) => void
@@ -38,6 +38,10 @@ export function Home() {
 
   function handleCarDetails(car: CarDTO) {
     navigate('CarDetails', { car });
+  }
+
+  function handleOpenMyCars() {
+    navigate('MyCars');
   }
 
   useEffect(() => {
@@ -84,7 +88,9 @@ export function Home() {
           )}
         />
       }
-      <MyCarsButton>
+      <MyCarsButton
+        onPress={handleOpenMyCars}
+      >
         <Ionicons
           name="ios-car-sport"
           size={38}
