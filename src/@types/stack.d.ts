@@ -5,5 +5,6 @@ declare namespace ReactNavigation {
     Scheduling: undefined;
     SchedulingDetails: undefined;
     SchedulingComplete: undefined;
+    MyCars: undefined;
   }
 }
