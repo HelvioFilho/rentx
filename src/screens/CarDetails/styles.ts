@@ -13,22 +13,13 @@ export const Header = styled.View`
   align-items: center;
 
   position: absolute;
+  z-index: 1000;
   margin-top: ${getStatusBarHeight() + RFValue(18)}px;
   margin-left: ${RFValue(24)}px;
 `;
 
 export const CarImages = styled.View`
-  margin-top: ${getStatusBarHeight() + RFValue(32)}px;
-`;
-
-export const Content = styled.ScrollView.attrs({
-  contentContainerStyle: {
-    padding: 24,
-    alignItems: 'center'
-  },
-  showsVerticalScrollIndicator: false,
-})`
-
+  margin-top: ${getStatusBarHeight() + RFValue(21)}px;
 `;
 
 export const Details = styled.View`
