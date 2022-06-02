@@ -111,6 +111,7 @@ export function Home() {
         barStyle="light-content"
         backgroundColor="transparent"
         translucent
+        hidden={false}
       />
       <Header>
         <HeaderContent>

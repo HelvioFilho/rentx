@@ -14,6 +14,7 @@ import {
 
 import theme from './src/global/styles/theme';
 import { Routes } from './src/routes';
+import { StatusBar } from 'react-native';
 
 export default function App() {
   const [fontsLoaded] = useFonts({

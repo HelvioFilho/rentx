@@ -15,6 +15,7 @@ import { Container } from './styles';
 
 import BrandSvg from '../../assets/brand.svg';
 import LogoSvg from '../../assets/logo.svg';
+import { StatusBar } from 'react-native';
 
 export function Splash() {
   const splashAnimation = useSharedValue(0);
@@ -75,6 +76,9 @@ export function Splash() {
 
   return (
     <Container>
+      <StatusBar
+        hidden
+      />
       <Animated.View
         style={[brandStyle, { position: 'absolute' }]}
       >

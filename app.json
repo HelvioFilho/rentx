@@ -9,6 +9,9 @@
     "splash": {
       "image": "./assets/splash.png",
       "backgroundColor": "#1B1B1F"
+    },
+    "androidStatusBar": {
+      "hidden": true
     }
   }
 }
