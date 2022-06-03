@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { FlatList, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 
 import { AntDesign } from '@expo/vector-icons';
 
@@ -47,10 +49,23 @@ export function MyCars() {
     goBack();
   }
 
-  useEffect(() => {
-    async function fetchCars() {
+  async function fetchCars() {
+    const key = "@rentx:user";
+    let id = '';
+    try {
+      const user = await AsyncStorage.getItem(key);
+      if (user) {
+        const userData = JSON.parse(user);
+        id = userData;
+      } else {
+        id = `user@` + uuid.v4();
+        await AsyncStorage.setItem(key, JSON.stringify(id));
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
       try {
-        const response = await api.get('/schedules_byuser?user_id=1')
+        const response = await api.get(`/schedules_byuser?user_id=${id}`);
         setCars(response.data);
       } catch (error) {
         console.log(error);
@@ -58,9 +73,12 @@ export function MyCars() {
         setLoading(false);
       }
     }
+  }
 
+  useEffect(() => {
     fetchCars();
   }, []);
+
   return (
     <Container>
       <Header>

@@ -4,6 +4,8 @@ import { format } from 'date-fns';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { useTheme } from 'styled-components';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import uuid from 'react-native-uuid';
 
 import { Accessory } from '../../components/Accessory';
 import { BackButton } from '../../components/BackButton';
@@ -67,31 +69,34 @@ export function SchedulingDetails() {
 
   async function handleConfirmRental() {
     setLoading(true);
-    const schedulesByCar = await api.get(`/schedules_bycars/${car.id}`);
+    const key = "@rentx:user";
+    let userId = '';
+    try {
+      const user = await AsyncStorage.getItem(key);
+      if (user) {
+        const userData = JSON.parse(user);
+        userId = userData;
+      } else {
+        userId = `user@` + uuid.v4();
+        await AsyncStorage.setItem(key, JSON.stringify(userId));
 
-    const unavailable_dates = [
-      ...schedulesByCar.data.unavailable_dates,
-      ...dates,
-    ];
-
-    await api.post('schedules_byuser', {
-      user_id: 1,
-      car,
-      startDate: format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
-      endDate: format(getPlatformDate(new Date(dates[dates.length - 1])), 'dd/MM/yyyy'),
-    });
-
-    api.put(`/schedules_bycars/${car.id}`, {
-      id: car.id,
-      unavailable_dates
-    })
-      .then(() => navigate('SchedulingComplete'))
-      .catch(() => {
-        setLoading(false);
-        Alert.alert('Não foi possível confirmar o agendamento.');
       }
-      );
-
+    } catch (error) {
+      console.log(error)
+    } finally {
+      await api.post('schedules_byuser', {
+        user_id: userId,
+        car,
+        startDate: format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
+        endDate: format(getPlatformDate(new Date(dates[dates.length - 1])), 'dd/MM/yyyy'),
+      })
+        .then(() => navigate('SchedulingComplete'))
+        .catch(() => {
+          setLoading(false);
+          Alert.alert('Não foi possível confirmar o agendamento.');
+        }
+        );
+    }
   }
 
   function handleGoBack() {
@@ -102,7 +107,7 @@ export function SchedulingDetails() {
     setRentalPeriod({
       start: format(getPlatformDate(new Date(dates[0])), 'dd/MM/yyyy'),
       end: format(getPlatformDate(new Date(dates[dates.length - 1])), 'dd/MM/yyyy'),
-    })
+    });
   }, []);
 
   return (
@@ -119,7 +124,6 @@ export function SchedulingDetails() {
             <Brand>{car.brand}</Brand>
             <Name>{car.name}</Name>
           </Description>
-
           <Rent>
             <Period>{car.rent.period}</Period>
             <Price>R$ {car.rent.price}</Price>
@@ -136,7 +140,6 @@ export function SchedulingDetails() {
             ))
           }
         </Accessories>
-
         <RentalPeriod>
           <CalendarIcon>
             <Feather
