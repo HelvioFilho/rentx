@@ -98,3 +98,10 @@ export const CarFooterDate = styled.Text`
 
   color: ${({ theme }) => theme.colors.title};
 `;
+
+export const TitleButton = styled.Text`
+  font-family: ${({ theme }) => theme.fonts.primary_400};
+  font-size: ${RFValue(13)}px;
+
+  color: ${({ theme }) => theme.colors.background_secondary};
+`;
