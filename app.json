@@ -1,8 +1,13 @@
 {
+  "name": "rentx",
+  "display_name": "rentx",
   "expo": {
     "name": "rentx",
     "slug": "rentx",
+    "scheme": "rentx",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -12,6 +17,17 @@
     },
     "androidStatusBar": {
       "hidden": true
-    }
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#1B1B1F"
+      }
+    },
+    "description": "Application to schedule a car rental from a dealership.",
+    "githubUrl": "https://github.com/HelvioFilho/rentx"
   }
 }
