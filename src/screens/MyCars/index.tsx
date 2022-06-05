@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Image, StatusBar, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Modal, StatusBar, TouchableOpacity, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -35,6 +35,7 @@ import {
 import { Car } from '../../components/Car';
 import { LoadAnimation } from '../../components/LoadAnimation';
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import { WarningModal } from '../../components/WarningModal';
 
 interface CarProps {
   id: string;
@@ -56,27 +57,45 @@ export function MyCars() {
   const [extraData, setExtraData] = useState('');
   const [schedules, setSchedules] = useState(0);
   const [updateSchedules, setUpdateSchedules] = useState(true);
+  const [visible, setVisible] = useState(false);
+  const [cancelId, setCancelId] = useState('');
 
   const { goBack } = useNavigation();
   const theme = useTheme();
+
+  function sortCar(cars: CarProps[]): CarProps[] {
+    const scheduleActive = cars.filter((item) => item.status === '1');
+    const scheduleCancelled = cars.filter((item) => item.status === '0');
+    const data = [
+      ...scheduleActive,
+      ...scheduleCancelled
+    ]
+    return data;
+  }
+
+  function cancelSchedule(id: string) {
+    setCancelId(id);
+    setVisible(true);
+  }
 
   function checkSchedules() {
     const schedule = cars.filter((item) => item.status !== '0');
     setSchedules(schedule.length);
   }
 
-  async function handleCancelScheduling(id: string) {
+  async function handleCancelScheduling() {
+    const id = cancelId;
+    setVisible(false);
+    const index = cars.findIndex(car => { return car.id === id });
+    const updatedCars = cars.map(car => ({ ...car }));
+    updatedCars[index].status = "0";
+    setCars(sortCar(updatedCars));
+    setExtraData(id);
+    setUpdateSchedules(!updateSchedules);
     try {
       await api.get(`/cancel?id=${id}`);
     } catch (error) {
       console.log(error);
-    } finally {
-      const index = cars.findIndex(car => { return car.id === id });
-      const updatedCars = cars.map(car => ({ ...car }));
-      updatedCars[index].status = "0";
-      setCars(updatedCars);
-      setExtraData(id);
-      setUpdateSchedules(!updateSchedules);
     }
   }
 
@@ -124,7 +143,7 @@ export function MyCars() {
           height: RFValue(75),
         }}
         activeOpacity={0.8}
-        onPress={() => handleCancelScheduling(id)}
+        onPress={() => cancelSchedule(id)}
       >
         <View
           style={{
@@ -170,7 +189,8 @@ export function MyCars() {
     } finally {
       try {
         const response = await api.get(`/schedules_byuser?user_id=${id}`);
-        setCars(response.data);
+        const data = response.data as CarProps[];
+        setCars(sortCar(data));
       } catch (error) {
         console.log(error);
       } finally {
@@ -245,6 +265,30 @@ export function MyCars() {
           />
         </Content>
       }
+      <Modal
+        animationType="fade"
+        transparent
+        visible={visible}
+        onRequestClose={() => setVisible(false)}
+      >
+        <WarningModal
+          message={`Tem certeza que deseja cancelar o agendamento?${'\n'}Essa ação não pode ser desfeita!`}
+          button={[
+            {
+              title: "Não",
+              color: theme.colors.success,
+              close: true,
+            },
+            {
+              title: "Sim",
+              color: theme.colors.main,
+              close: false,
+            },
+          ]}
+          closeModal={() => setVisible(false)}
+          primaryFunction={handleCancelScheduling}
+        />
+      </Modal>
     </Container >
   );
 }
