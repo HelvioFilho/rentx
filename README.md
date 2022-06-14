@@ -19,8 +19,6 @@
 
 ## Technologies
 
-This project is part of the RocketSeat's ignite course and shows using AsyncStorage to store data, Yup for form validation, victory native to generate charts and the social login with google and apple.
-
 This project was developed using the following technologies:
 
 - [React Native](https://reactnative.dev/)
