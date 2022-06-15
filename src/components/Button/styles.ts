@@ -18,6 +18,7 @@ export const Container = (styled(RectButton) <ButtonProps>`
   justify-content: center;
 
   background-color: ${({ theme, color }) => color || theme.colors.main};
+  margin-bottom: 8px;
 ` as unknown) as typeof RectButton;
 
 export const Title = styled.Text<ButtonTextProps>`
