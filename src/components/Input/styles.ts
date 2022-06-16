@@ -1,11 +1,15 @@
+import styled, { css } from 'styled-components/native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import styled from 'styled-components/native';
+
+interface LineProps {
+  isFocused: boolean;
+}
 
 export const Container = styled.View`
   flex-direction: row;
 `;
 
-export const IconContainer = styled.View`
+export const IconContainer = styled.View<LineProps>`
   height: 56px;
   width: 55px;
   justify-content: center;
@@ -13,10 +17,15 @@ export const IconContainer = styled.View`
 
   margin-right: 2px;
 
-  background-color: ${({ theme }) => theme.colors.background_secondary}
+  background-color: ${({ theme }) => theme.colors.background_secondary};
+
+  ${({ isFocused, theme }) => isFocused && css`
+    border-bottom-width: 2px;
+    border-bottom-color: ${theme.colors.main};
+  `};
 `;
 
-export const InputText = styled.TextInput`
+export const InputText = styled.TextInput<LineProps>`
   flex: 1;
 
   color: ${({ theme }) => theme.colors.text};
@@ -26,4 +35,9 @@ export const InputText = styled.TextInput`
   font-family: ${({ theme }) => theme.fonts.primary_400};
   
   padding: 0% 23px;
+
+  ${({ isFocused, theme }) => isFocused && css`
+    border-bottom-width: 2px;
+    border-bottom-color: ${theme.colors.main};
+  `};
 `;

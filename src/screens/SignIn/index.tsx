@@ -32,6 +32,7 @@ export function SignIn() {
     >
       <TouchableWithoutFeedback
         onPress={Keyboard.dismiss}
+        accessible={false}
       >
         <Container>
           <StatusBar
