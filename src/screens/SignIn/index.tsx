@@ -24,14 +24,20 @@ import {
   Footer,
 } from './styles';
 import { WarningModal } from '../../components/WarningModal';
+import { useNavigation } from '@react-navigation/native';
 
 export function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const { navigate } = useNavigation();
 
   const theme = useTheme();
+
+  function handleNewAccount() {
+    navigate('SignUpFirstStep');
+  }
 
   async function handleSignIn() {
     try {
@@ -107,9 +113,8 @@ export function SignIn() {
             <Button
               title='Criar conta gratuita'
               color={theme.colors.background_secondary}
-              onPress={() => { }}
-              enabled={false}
-              loading={false}
+              onPress={handleNewAccount}
+              enabled={true}
               light={true}
             />
           </Footer>
