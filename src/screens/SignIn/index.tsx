@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
+  Modal,
   StatusBar,
-  TouchableWithoutFeedback,
 } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+
+import * as Yup from 'yup';
+
 import { useTheme } from 'styled-components';
+
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { PasswordInput } from '../../components/PasswordInput';
@@ -18,12 +23,38 @@ import {
   Form,
   Footer,
 } from './styles';
+import { WarningModal } from '../../components/WarningModal';
 
 export function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [visible, setVisible] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const theme = useTheme();
+
+  async function handleSignIn() {
+    try {
+      const schema = Yup.object().shape({
+        password: Yup.string()
+          .required('A senha é obrigatória'),
+        email: Yup.string()
+          .required('E-mail obrigatório')
+          .email('Digite um e-mail válido'),
+      });
+
+      await schema.validate({ email, password });
+      console.log('Tudo certo');
+    } catch (error) {
+      if (error instanceof Yup.ValidationError) {
+        setErrorMessage(error.message);
+        setVisible(true);
+      } else {
+        setErrorMessage('Error na autenticação, verifique as credenciais');
+        setVisible(true);
+      }
+    }
+  }
 
   return (
     <KeyboardAvoidingView
@@ -69,8 +100,8 @@ export function SignIn() {
           <Footer>
             <Button
               title='Login'
-              onPress={() => { }}
-              enabled={false}
+              onPress={handleSignIn}
+              enabled={true}
               loading={false}
             />
             <Button
@@ -82,6 +113,27 @@ export function SignIn() {
               light={true}
             />
           </Footer>
+          <Modal
+            animationType="fade"
+            transparent
+            visible={visible}
+            onRequestClose={() => setVisible(false)}
+          >
+            <WarningModal
+              title="Aviso"
+              height={170}
+              align
+              message={errorMessage}
+              button={[
+                {
+                  title: "Fechar",
+                  color: theme.colors.main,
+                  close: true,
+                },
+              ]}
+              closeModal={() => setVisible(false)}
+            />
+          </Modal>
         </Container>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
