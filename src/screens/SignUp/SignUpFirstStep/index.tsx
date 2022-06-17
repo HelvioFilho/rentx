@@ -18,7 +18,7 @@ import {
 } from './styles';
 
 export function SignUpFirstStep() {
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
   return (
     <KeyboardAvoidingView
       behavior="position"
@@ -64,6 +64,7 @@ export function SignUpFirstStep() {
           </Form>
           <Button
             title="Próximo"
+            onPress={() => navigate('SignUpSecondStep')}
           />
         </Container>
       </TouchableWithoutFeedback>
