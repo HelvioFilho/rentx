@@ -16,18 +16,6 @@ export const ImageIndexes = styled.View`
   padding-right: ${RFValue(24)}px;
 `;
 
-export const ImageIndex = styled.View<ImageIndexProps>`
-  width: ${RFValue(6)}px;
-  height: ${RFValue(6)}px;
-
-  margin-left: ${RFValue(8)}px;
-  border-radius: ${RFValue(3)}px;
-
-  background-color: ${({ theme, active }) =>
-    active ? theme.colors.title : theme.colors.shape
-  };
-`;
-
 export const CarImageWrapper = styled.View`
   width: ${Dimensions.get('window').width}px;
   height: ${RFValue(132)}px;
