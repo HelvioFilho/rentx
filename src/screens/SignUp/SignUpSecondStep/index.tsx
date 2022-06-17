@@ -34,7 +34,7 @@ export function SignUpSecondStep() {
   const [visible, setVisible] = useState(false);
   const [height, setHeight] = useState(0);
 
-  const { goBack } = useNavigation();
+  const { goBack, navigate } = useNavigation();
   const theme = useTheme();
   const { params } = useRoute();
   const { user } = params as Params;
@@ -60,6 +60,11 @@ export function SignUpSecondStep() {
       return;
     }
 
+    navigate('Confirmation', {
+      title: 'Conta Criada!',
+      message: `Agora é só fazer login\ne aproveitar.`,
+      nextScreenRoute: 'SignIn'
+    });
   }
 
   return (
