@@ -1,13 +1,13 @@
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { Keyboard, KeyboardAvoidingView } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { Keyboard, KeyboardAvoidingView, Modal } from 'react-native';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { useTheme } from 'styled-components';
 import { BackButton } from '../../../components/BackButton';
 import { Bullet } from '../../../components/Bullet';
 import { Button } from '../../../components/Button';
-import { Input } from '../../../components/Input';
 import { PasswordInput } from '../../../components/PasswordInput';
+import { WarningModal } from '../../../components/WarningModal';
 
 import {
   Container,
@@ -19,9 +19,49 @@ import {
   FormTitle,
 } from './styles';
 
+interface Params {
+  user: {
+    name: string;
+    email: string;
+    driverLicense: string;
+  }
+}
+
 export function SignUpSecondStep() {
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [visible, setVisible] = useState(false);
+  const [height, setHeight] = useState(0);
+
   const { goBack } = useNavigation();
   const theme = useTheme();
+  const { params } = useRoute();
+  const { user } = params as Params;
+
+  function handleRegister() {
+    if (!password) {
+      setErrorMessage("A senha não pode ser vazia!");
+      setHeight(170);
+      setVisible(true);
+      return;
+    }
+    if (!passwordConfirm) {
+      setErrorMessage("A confirmação de senha não pode ser vazia!");
+      setHeight(200);
+      setVisible(true);
+      return;
+    }
+
+    if (password !== passwordConfirm) {
+      setErrorMessage("A senhas não são iguais!");
+      setHeight(170);
+      setVisible(true);
+      return;
+    }
+
+  }
+
   return (
     <KeyboardAvoidingView
       behavior="position"
@@ -50,16 +90,42 @@ export function SignUpSecondStep() {
             <PasswordInput
               iconName="lock"
               placeholder="Senha"
+              onChangeText={setPassword}
+              value={password}
             />
             <PasswordInput
               iconName="lock"
               placeholder="Repetir senha"
+              onChangeText={setPasswordConfirm}
+              value={passwordConfirm}
             />
           </Form>
           <Button
             title="Cadastrar"
             color={theme.colors.success}
+            onPress={handleRegister}
           />
+          <Modal
+            animationType="fade"
+            transparent
+            visible={visible}
+            onRequestClose={() => setVisible(false)}
+          >
+            <WarningModal
+              title="Aviso"
+              height={height}
+              align
+              message={errorMessage}
+              button={[
+                {
+                  title: "Fechar",
+                  color: theme.colors.main,
+                  close: true,
+                },
+              ]}
+              closeModal={() => setVisible(false)}
+            />
+          </Modal>
         </Container>
       </TouchableWithoutFeedback>
     </ KeyboardAvoidingView>
