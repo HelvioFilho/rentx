@@ -4,9 +4,19 @@ declare namespace ReactNavigation {
     CarDetails: undefined;
     Scheduling: undefined;
     SchedulingDetails: undefined;
-    SchedulingComplete: undefined;
+    Confirmation: {
+      title: string;
+      message: string;
+      nextScreenRoute: string;
+    };
     MyCars: undefined;
     SignUpFirstStep: undefined;
-    SignUpSecondStep: { user: { name: string; email: string; driverLicense: string } };
+    SignUpSecondStep: {
+      user: {
+        name: string;
+        email: string;
+        driverLicense: string
+      }
+    };
   }
 }
