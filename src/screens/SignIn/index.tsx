@@ -35,10 +35,6 @@ export function SignIn() {
 
   const theme = useTheme();
 
-  function handleNewAccount() {
-    navigate('SignUpFirstStep');
-  }
-
   async function handleSignIn() {
     try {
       const schema = Yup.object().shape({
@@ -113,7 +109,7 @@ export function SignIn() {
             <Button
               title='Criar conta gratuita'
               color={theme.colors.background_secondary}
-              onPress={handleNewAccount}
+              onPress={() => navigate('SignUpFirstStep')}
               enabled={true}
               light={true}
             />
