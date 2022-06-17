@@ -12,16 +12,17 @@ import {
 interface InputProps extends TextInputProps {
   iconName: React.ComponentProps<typeof Feather>['name'];
   value?: string;
+  marginBottom?: number;
 }
 
-export function Input({ iconName, value, ...rest }: InputProps) {
+export function Input({ iconName, value, marginBottom, ...rest }: InputProps) {
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
 
   const theme = useTheme();
 
   return (
-    <Container>
+    <Container marginBottom={marginBottom}>
       <IconContainer
         isFocused={isFocused}
       >

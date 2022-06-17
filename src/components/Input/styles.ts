@@ -5,8 +5,13 @@ interface LineProps {
   isFocused: boolean;
 }
 
-export const Container = styled.View`
+interface InputProps {
+  marginBottom?: number;
+}
+
+export const Container = styled.View<InputProps>`
   flex-direction: row;
+  margin-bottom: ${({ marginBottom }) => marginBottom ? marginBottom : 0}px;
 `;
 
 export const IconContainer = styled.View<LineProps>`
@@ -14,7 +19,7 @@ export const IconContainer = styled.View<LineProps>`
   width: 55px;
   justify-content: center;
   align-items: center;
-
+  
   margin-right: 2px;
 
   background-color: ${({ theme }) => theme.colors.background_secondary};
