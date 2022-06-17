@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from 'styled-components';
 
 import {
   Container,
@@ -9,10 +10,14 @@ import {
   Footer,
   Button,
   Title,
+  TitleAlert,
 } from './styles';
 
 interface WarningModalProps {
+  title?: string;
   message: string;
+  height?: number;
+  align?: boolean;
   button: {
     title: string;
     color: string;
@@ -23,20 +28,36 @@ interface WarningModalProps {
   primaryFunction?: () => void;
 }
 
-export function WarningModal({ message, button, closeModal, primaryFunction }: WarningModalProps) {
+export function WarningModal(
+  {
+    title,
+    message,
+    height = 200,
+    align = false,
+    button,
+    closeModal,
+    primaryFunction
+  }: WarningModalProps) {
+  const theme = useTheme();
   return (
     <Container>
-      <ContainerModal>
+      <ContainerModal height={height}>
         <Close
           onPress={closeModal}
         >
           <IconX
             name="md-close-circle-outline"
             size={30}
-            color="white"
+            color={theme.colors.line}
           />
         </Close>
-        <Message>
+        {
+          title &&
+          <TitleAlert>
+            {title}
+          </TitleAlert>
+        }
+        <Message align={align}>
           {message}
         </Message>
         <Footer itens={button.length}>

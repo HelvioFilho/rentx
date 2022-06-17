@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 import { Ionicons } from '@expo/vector-icons';
 import { RFValue } from 'react-native-responsive-fontsize';
 
@@ -14,6 +14,14 @@ interface TitleProps {
   textColor: string;
 }
 
+interface ContainerProps {
+  height: number;
+}
+
+interface MessageProps {
+  align: boolean;
+}
+
 export const Container = styled.View`
   flex: 1;
   height: 100%;
@@ -24,9 +32,9 @@ export const Container = styled.View`
 
 export const IconX = styled(Ionicons)``;
 
-export const ContainerModal = styled.View`
+export const ContainerModal = styled.View<ContainerProps>`
   width: 90%;
-  height: 200px;
+  height: ${({ height }) => height}px;
   justify-content: center;
   align-items: center;
   
@@ -43,11 +51,14 @@ export const Close = styled.TouchableOpacity`
   padding: 8px;
 `;
 
-export const Message = styled.Text`
+export const Message = styled.Text<MessageProps>`
   width: 80%;
   font-size: ${RFValue(14)}px;
-  
-  color: #EBF2FF;
+  ${({ align }) => align && css`
+    text-align: center;
+  `};
+
+  color: ${({ theme }) => theme.colors.line};
   
   padding-top: 10px;
 `;
@@ -74,6 +85,13 @@ export const Button = styled.TouchableOpacity<buttonProps>`
 
 export const Title = styled.Text<TitleProps>`
   font-size: ${RFValue(13)}px;
-  
+
   color: ${({ textColor }) => textColor};
+`;
+
+export const TitleAlert = styled.Text`
+  font-size: ${RFValue(20)}px;
+  font-weight: bold;
+
+  color: ${({ theme }) => theme.colors.line};
 `;
