@@ -6,5 +6,6 @@ declare namespace ReactNavigation {
     SchedulingDetails: undefined;
     SchedulingComplete: undefined;
     MyCars: undefined;
+    SignUpFirstStep: undefined;
   }
 }
