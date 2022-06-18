@@ -62,9 +62,9 @@ export function SignUpSecondStep() {
     }
 
     await api.post('/user', {
-      name: user.name,
-      email: user.email,
-      driver_license: user.driverLicense,
+      name: user.name.trim(),
+      email: user.email.trim(),
+      driver_license: user.driverLicense.trim(),
       password
     })
       .then((response) => {
