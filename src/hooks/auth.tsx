@@ -19,6 +19,14 @@ interface AuthState {
   user: User;
 }
 
+interface SignInResponseProps {
+  error: boolean;
+  message: string;
+  data?: {
+    token: string;
+    user: User;
+  }
+}
 interface SignInCredentials {
   email: string;
   password: string;
@@ -26,7 +34,7 @@ interface SignInCredentials {
 
 interface AuthContextData {
   user: User;
-  signIn: (credentials: SignInCredentials) => Promise<void>;
+  signIn: (credentials: SignInCredentials) => Promise<SignInResponseProps>;
 }
 
 interface AuthProviderProps {
@@ -44,6 +52,12 @@ function AuthProvider({ children }: AuthProviderProps) {
       password
     });
     console.log(response.data);
+    const { token, user } = response.data;
+
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    setData({ token, user });
+    return response.data;
   }
   return (
     <AuthContext.Provider

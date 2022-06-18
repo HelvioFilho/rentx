@@ -10,10 +10,13 @@ import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import * as Yup from 'yup';
 
 import { useTheme } from 'styled-components';
+import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../hooks/auth';
 
 import { Button } from '../../components/Button';
 import { Input } from '../../components/Input';
 import { PasswordInput } from '../../components/PasswordInput';
+import { WarningModal } from '../../components/WarningModal';
 
 import {
   Container,
@@ -23,17 +26,16 @@ import {
   Form,
   Footer,
 } from './styles';
-import { WarningModal } from '../../components/WarningModal';
-import { useNavigation } from '@react-navigation/native';
 
 export function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [visible, setVisible] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const { navigate } = useNavigation();
 
   const theme = useTheme();
+  const { navigate } = useNavigation();
+  const { signIn } = useAuth();
 
   async function handleSignIn() {
     try {
@@ -46,7 +48,11 @@ export function SignIn() {
       });
 
       await schema.validate({ email, password });
-      console.log('Tudo certo');
+      const data = await signIn({ email, password });
+      if (data.error) {
+        setErrorMessage(data.message);
+        setVisible(true);
+      }
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
         setErrorMessage(error.message);
