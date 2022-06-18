@@ -8,6 +8,7 @@ import { Bullet } from '../../../components/Bullet';
 import { Button } from '../../../components/Button';
 import { PasswordInput } from '../../../components/PasswordInput';
 import { WarningModal } from '../../../components/WarningModal';
+import { api } from '../../../services/api';
 
 import {
   Container,
@@ -39,7 +40,7 @@ export function SignUpSecondStep() {
   const { params } = useRoute();
   const { user } = params as Params;
 
-  function handleRegister() {
+  async function handleRegister() {
     if (!password) {
       setErrorMessage("A senha não pode ser vazia!");
       setHeight(170);
@@ -60,11 +61,31 @@ export function SignUpSecondStep() {
       return;
     }
 
-    navigate('Confirmation', {
-      title: 'Conta Criada!',
-      message: `Agora é só fazer login\ne aproveitar.`,
-      nextScreenRoute: 'SignIn'
-    });
+    await api.post('/user', {
+      name: user.name,
+      email: user.email,
+      driver_license: user.driverLicense,
+      password
+    })
+      .then((response) => {
+        if (!response.data.error) {
+          navigate('Confirmation', {
+            title: 'Conta Criada!',
+            message: `Agora é só fazer login\ne aproveitar.`,
+            nextScreenRoute: 'SignIn'
+          });
+        } else {
+          setErrorMessage(`Não foi possível cadastrar!\nUsuário já existe!`);
+          setHeight(200);
+          setVisible(true);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setErrorMessage("Não foi possível cadastrar!");
+        setHeight(170);
+        setVisible(true);
+      });
   }
 
   return (
