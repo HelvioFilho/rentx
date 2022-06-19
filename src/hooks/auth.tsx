@@ -7,7 +7,6 @@ import React, {
 import { api } from '../services/api';
 
 interface User {
-  id: string;
   email: string;
   name: string;
   driver_license: string;
@@ -51,12 +50,10 @@ function AuthProvider({ children }: AuthProviderProps) {
       email,
       password
     });
-    console.log(response.data);
-    const { token, user } = response.data;
-
+    const { token, user } = response.data.data;
+    setData({ token, user });
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    setData({ token, user });
     return response.data;
   }
   return (
