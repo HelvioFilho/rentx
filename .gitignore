@@ -56,3 +56,6 @@ dist/
 
 # Env
 .env
+
+#Home With Buttons
+/src/screens/HomeWithButton/
