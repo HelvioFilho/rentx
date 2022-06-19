@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { CommonActions, useNavigation } from '@react-navigation/native';
 import { RFValue } from 'react-native-responsive-fontsize';
 
 import Animated, {
@@ -19,7 +19,7 @@ import { StatusBar } from 'react-native';
 
 export function Splash() {
   const splashAnimation = useSharedValue(0);
-  const { navigate } = useNavigation();
+  const { dispatch } = useNavigation();
 
   const brandStyle = useAnimatedStyle(() => {
     return {
@@ -58,7 +58,10 @@ export function Splash() {
   });
 
   function startApp() {
-    navigate('Home');
+    dispatch(CommonActions.reset({
+      index: 0,
+      routes: [{ name: 'SignIn' }]
+    }))
   }
 
   useEffect(() => {
