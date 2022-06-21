@@ -1,6 +1,6 @@
-import { tableSchema } from '@nozbe/watermelondb';
+import { tableSchema, TableSchema } from '@nozbe/watermelondb';
 
-const userSchema = tableSchema({
+const userSchema: TableSchema = tableSchema({
   name: 'user',
   columns: [
     {
@@ -16,13 +16,13 @@ const userSchema = tableSchema({
       type: 'string',
     },
     {
-      name: 'token',
-      type: 'string',
-    },
-    {
       name: 'photo',
       type: 'string',
     },
+    {
+      name: 'token',
+      type: 'string',
+    }
   ]
 });
 
