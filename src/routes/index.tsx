@@ -11,7 +11,7 @@ export function Routes() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }} >
       <NavigationContainer>
-        {user ? <AppTabRoutes /> : <AuthRoutes />}
+        {user.email ? <AppTabRoutes /> : <AuthRoutes />}
       </NavigationContainer>
     </GestureHandlerRootView>
   );
