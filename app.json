@@ -8,6 +8,17 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Permitir que $(PRODUCT_NAME) acesse suas fotos?",
+          "cameraPermission": "Permitir que $(PRODUCT_NAME) abra a câmera?",
+          "//": "Desativar a permissão do microfone",
+          "microphonePermission": false
+        }
+      ]
+    ],
     "assetBundlePatterns": [
       "**/*"
     ],
