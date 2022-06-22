@@ -42,6 +42,7 @@ export function PasswordInput({ iconName, value, ...rest }: InputProps) {
         }}
         secureTextEntry={isVisible}
         isFocused={isFocused}
+        autoCorrect={false}
         {...rest}
       />
       <IconContainer
