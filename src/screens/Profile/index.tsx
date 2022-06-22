@@ -30,6 +30,18 @@ import { useAuth } from '../../hooks/auth';
 import { Button } from '../../components/Button';
 import { WarningModal } from '../../components/WarningModal';
 
+interface ButtonProps {
+  title: string;
+  color: string;
+  close: boolean;
+}
+
+interface AlertProps {
+  title: string;
+  message: string;
+  height: number;
+}
+
 export function Profile() {
   const { user, signOut, updatedUser } = useAuth();
 
@@ -37,7 +49,8 @@ export function Profile() {
   const [avatar, setAvatar] = useState(user.photo ? user.photo : `https://ui-avatars.com/api/?bold=true&font-size=0.60&background=1B1B1F&color=fff&name=${user.name}&length=1`);
   const [name, setName] = useState(user.name);
   const [driverLicense, setDriverLicense] = useState(user.driver_license);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [alert, setAlert] = useState({} as AlertProps);
+  const [button, setButton] = useState({} as ButtonProps[]);
   const [visible, setVisible] = useState(false);
 
   const theme = useTheme();
@@ -79,11 +92,21 @@ export function Profile() {
         photo: avatar,
         token: user.token
       });
-      setErrorMessage("Perfil atualizado!");
+      setAlert({ title: "Aviso", message: "Perfil atualizado!", height: 170 });
+      setButton([{
+        title: "Fechar",
+        color: theme.colors.main,
+        close: true,
+      }]);
       setVisible(true);
     } catch (error) {
       if (error instanceof Yup.ValidationError) {
-        setErrorMessage(error.message);
+        setAlert({ title: "Aviso", message: error.message, height: 170 });
+        setButton([{
+          title: "Fechar",
+          color: theme.colors.main,
+          close: true,
+        }]);
         setVisible(true);
         if (!name) setName(user.name);
         if (!driverLicense) setDriverLicense(user.driver_license);
@@ -92,6 +115,27 @@ export function Profile() {
         console.log("não foi possível salvar as informações");
       }
     }
+  }
+
+  async function handleSignOut() {
+    setAlert({
+      title: "Aviso",
+      message: "Se você sair, irá precisar de internet para conectar-se novamente.",
+      height: 200,
+    });
+    setButton([
+      {
+        title: "Cancelar",
+        color: theme.colors.main,
+        close: true,
+      },
+      {
+        title: "Sair",
+        color: theme.colors.success,
+        close: false
+      },
+    ]);
+    setVisible(true);
   }
 
   return (
@@ -108,7 +152,7 @@ export function Profile() {
             <HeaderTop>
               <BackButton color={theme.colors.shape} onPress={goBack} />
               <HeaderTitle>Editar Perfil</HeaderTitle>
-              <LogoutButton onPress={signOut}>
+              <LogoutButton onPress={handleSignOut}>
                 <Feather name="power" size={24} color={theme.colors.shape} />
               </LogoutButton>
             </HeaderTop>
@@ -190,18 +234,13 @@ export function Profile() {
             onRequestClose={() => setVisible(false)}
           >
             <WarningModal
-              title="Aviso"
-              height={170}
+              title={alert.title}
+              height={alert.height}
               align
-              message={errorMessage}
-              button={[
-                {
-                  title: "Fechar",
-                  color: theme.colors.main,
-                  close: true,
-                },
-              ]}
+              message={alert.message}
+              button={button}
               closeModal={() => setVisible(false)}
+              primaryFunction={signOut}
             />
           </Modal>
         </Container>
