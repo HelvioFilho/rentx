@@ -4,7 +4,6 @@ import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 import { BackButton } from '../../components/BackButton';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import * as ImagePicker from 'expo-image-picker';
 
 import {
@@ -29,7 +28,7 @@ import { PasswordInput } from '../../components/PasswordInput';
 import { useAuth } from '../../hooks/auth';
 
 export function Profile() {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
 
   const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
   const [avatar, setAvatar] = useState(user.photo ? user.photo : `https://ui-avatars.com/api/?bold=true&font-size=0.60&background=1B1B1F&color=fff&name=${user.name}&length=1`);
@@ -38,10 +37,6 @@ export function Profile() {
 
   const theme = useTheme();
   const { goBack } = useNavigation();
-
-  function handleLogout() {
-
-  }
 
   async function handleAvatarSelect() {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -73,7 +68,7 @@ export function Profile() {
             <HeaderTop>
               <BackButton color={theme.colors.shape} onPress={goBack} />
               <HeaderTitle>Editar Perfil</HeaderTitle>
-              <LogoutButton onPress={handleLogout}>
+              <LogoutButton onPress={signOut}>
                 <Feather name="power" size={24} color={theme.colors.shape} />
               </LogoutButton>
             </HeaderTop>
@@ -84,7 +79,7 @@ export function Profile() {
               </PhotoButton>
             </PhotoContainer>
           </Header>
-          <Content style={{ marginBottom: useBottomTabBarHeight() }}>
+          <Content>
             <Options>
               <Option
                 onPress={() => setOption('dataEdit')}
@@ -146,6 +141,6 @@ export function Profile() {
           </Content>
         </Container>
       </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+    </KeyboardAvoidingView >
   );
 }
