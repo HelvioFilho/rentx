@@ -1,5 +1,5 @@
-import { Model } from '@nozbe/watermelondb';
-import { field } from '@nozbe/watermelondb/decorators';
+import Model from '@nozbe/watermelondb/Model';
+import field from '@nozbe/watermelondb/decorators/field';
 
 class User extends Model {
   static table = 'user';

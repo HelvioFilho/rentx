@@ -1,4 +1,4 @@
-import { tableSchema, TableSchema } from '@nozbe/watermelondb';
+import { tableSchema, TableSchema } from '@nozbe/watermelondb/Schema';
 
 const userSchema: TableSchema = tableSchema({
   name: 'user',
