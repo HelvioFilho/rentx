@@ -1,4 +1,4 @@
-import { BorderlessButton, RectButton, TouchableOpacity } from 'react-native-gesture-handler';
+import { BorderlessButton, RectButton, TouchableOpacity, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled, { css } from 'styled-components/native';
@@ -11,7 +11,7 @@ interface OptionProps {
   active: boolean;
 }
 
-export const Container = styled.View`
+export const Container = styled(GestureHandlerRootView)`
   background-color: ${({ theme }) => theme.colors.background_primary};
 `;
 
@@ -46,10 +46,11 @@ export const LogoutButton = styled(BorderlessButton) <ButtonProps>`
 `;
 
 export const PhotoContainer = styled.View`
+  position:relative;
   width: 180px;
   height: 180px;
   border-radius: 90px;
-
+  z-index: 22;
   background-color: ${({ theme }) => theme.colors.shape};
 
   margin-top: 28px;
