@@ -55,7 +55,7 @@ export function Profile() {
 
   const theme = useTheme();
   const { goBack } = useNavigation();
-
+  
   async function handleAvatarSelect() {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -81,7 +81,7 @@ export function Profile() {
           .required('Nome não pode ser vazio')
       });
 
-      const data = { name, driverLicense };
+      const data = { name, driverLicense};
       await schema.validate(data);
 
       await updatedUser({

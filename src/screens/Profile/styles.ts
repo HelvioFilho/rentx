@@ -1,4 +1,4 @@
-import { BorderlessButton, RectButton } from 'react-native-gesture-handler';
+import { BorderlessButton, RectButton, TouchableOpacity } from 'react-native-gesture-handler';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled, { css } from 'styled-components/native';
@@ -90,7 +90,7 @@ export const Options = styled.View`
   margin-bottom: 24px;
 `;
 
-export const Option = styled.TouchableOpacity<OptionProps>`
+export const Option = styled(TouchableOpacity)<OptionProps>`
   padding-bottom: 14px;
   ${({ active }) => active && css`
     border-bottom-width: 3px;

@@ -29,8 +29,8 @@ export function Button({
     <Container
       onPress={onPress}
       enabled={enabled}
-      {...rest}
       style={{ opacity: (enabled === false || loading === true) ? .5 : 1 }}
+      {...rest}
     >
       {loading
         ?
