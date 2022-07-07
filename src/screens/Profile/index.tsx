@@ -52,7 +52,7 @@ export function Profile() {
   const [alert, setAlert] = useState({} as AlertProps);
   const [button, setButton] = useState({} as ButtonProps[]);
   const [visible, setVisible] = useState(false);
-
+  
   const theme = useTheme();
   const { goBack } = useNavigation();
   
