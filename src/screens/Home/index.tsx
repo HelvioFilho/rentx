@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import { RFValue } from 'react-native-responsive-fontsize';
-import NetInfo, { useNetInfo } from '@react-native-community/netinfo';
+import { useNetInfo } from '@react-native-community/netinfo';
+import { synchronize } from '@nozbe/watermelondb/sync';
+
+import {Car as ModelCar} from '../../database/model/Car';
 
 import Logo from '../../assets/logo.svg';
 import { Car } from '../../components/Car';
@@ -17,6 +20,7 @@ import {
 } from './styles';
 import { api } from '../../services/api';
 import { CarDTO } from '../../dtos/CarDTO';
+import { database } from '../../database';
 
 type NavigateParamList = {
   navigate: (
@@ -30,7 +34,7 @@ type NavigateParamList = {
 export function Home() {
   const [cars, setCars] = useState<CarDTO[]>([]);
   const [loading, setLoading] = useState(true);
-
+  
   const { navigate } = useNavigation<NavigateParamList>();
   const netInfo = useNetInfo();
 
@@ -38,11 +42,35 @@ export function Home() {
     navigate('CarDetails', { car });
   }
 
+  async function offlineSynchronize(){
+    await synchronize({
+      database,
+      pullChanges: async ({lastPulledAt}) => {
+        // const {data} = await api.post(`/cars/async`);
+        // console.log(lastPulledAt);
+        // const {changes, latestVersion} = data;
+        return {changes:{}, timestamp: 1657108800};        
+      },
+      pushChanges: async ({changes}) => {
+        const user = changes.user;
+        try{
+          await api.post('/user/async', user);
+
+        }catch(err){
+          console.log(err);
+        }
+      },
+    });
+  }
+
   useEffect(() => {
     let isMounted = true;
     async function fetchCars() {
       try {
         const response = await api.get('/cars');
+        // const carCollection = database.get<ModelCar>('cars');
+        // const cars = await carCollection.query().fetch();
+
         if (isMounted) {
           setCars(response.data);
         }
@@ -62,13 +90,11 @@ export function Home() {
   }, []);
 
   useEffect(() => {
-    if(netInfo.isConnected){
-      console.log('Está online');
-    }else{
-      console.log('você está offline');
+    if(netInfo.isConnected === true){
+      offlineSynchronize();
     }
   },[netInfo.isConnected]);
-  
+
   return (
     <Container>
       <StatusBar
