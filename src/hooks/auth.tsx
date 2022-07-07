@@ -13,7 +13,7 @@ interface APIUser {
   email: string;
   name: string;
   driver_license: string;
-  avatar: string;
+  photo: string;
 }
 interface User {
   id: string;
@@ -65,7 +65,6 @@ function AuthProvider({ children }: AuthProviderProps) {
       } else {
         const { token, user } = response.data.data;
         api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
         const userCollection = database.get<ModelUser>('user');
         await database.write(async () => {
           await userCollection.create((newUser) => {
@@ -73,7 +72,7 @@ function AuthProvider({ children }: AuthProviderProps) {
             newUser.name = user.name;
             newUser.driver_license = user.driver_license;
             newUser.token = token;
-            newUser.photo = user.avatar;
+            newUser.photo = user.photo;
           });
         });
 
