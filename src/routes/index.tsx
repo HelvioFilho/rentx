@@ -5,10 +5,12 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useAuth } from '../hooks/auth';
 import { AppTabRoutes } from './app.tab.routes';
 import { AuthRoutes } from './auth.routes';
+import { LoadAnimation } from '../components/LoadAnimation';
 
 export function Routes() {
-  const { user } = useAuth();
+  const { loading, user } = useAuth();
   return (
+    loading ? <LoadAnimation /> :
     <GestureHandlerRootView style={{ flex: 1 }} >
       <NavigationContainer>
         {user.email ? <AppTabRoutes /> : <AuthRoutes />}
