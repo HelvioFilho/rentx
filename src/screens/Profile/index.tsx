@@ -29,6 +29,7 @@ import { PasswordInput } from '../../components/PasswordInput';
 import { useAuth } from '../../hooks/auth';
 import { Button } from '../../components/Button';
 import { WarningModal } from '../../components/WarningModal';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 interface ButtonProps {
   title: string;
@@ -44,6 +45,8 @@ interface AlertProps {
 
 export function Profile() {
   const { user, signOut, updatedUser } = useAuth();
+  
+  const netInfo = useNetInfo();
 
   const [option, setOption] = useState<'dataEdit' | 'passwordEdit'>('dataEdit');
   const [avatar, setAvatar] = useState(user.photo ? user.photo : `https://ui-avatars.com/api/?bold=true&font-size=0.60&background=1B1B1F&color=fff&name=${user.name}&length=1`);
@@ -83,7 +86,7 @@ export function Profile() {
 
       const data = { name, driverLicense};
       await schema.validate(data);
-
+      console.log(user);
       await updatedUser({
         id: user.id,
         email: user.email,
@@ -112,7 +115,7 @@ export function Profile() {
         if (!driverLicense) setDriverLicense(user.driver_license);
 
       } else {
-        console.log("não foi possível salvar as informações");
+        console.log(error + "não foi possível salvar as informações");
       }
     }
   }
@@ -136,6 +139,26 @@ export function Profile() {
       },
     ]);
     setVisible(true);
+  }
+
+  async function handleOptionChange(optionSelected: 'dataEdit' | 'passwordEdit') {
+    if(netInfo.isConnected === false && optionSelected === 'passwordEdit'){
+      setAlert({
+        title: "Aviso",
+        message: "Para mudar a senha você precisa conectar-se a internet!.",
+        height: 200,
+      });
+      setButton([
+        {
+          title: "Ok",
+          color: theme.colors.success,
+          close: true
+        },
+      ]);
+      setVisible(true);
+    }else{
+      setOption(optionSelected);
+    }
   }
 
   return (
@@ -166,14 +189,14 @@ export function Profile() {
           <Content>
             <Options>
               <Option
-                onPress={() => setOption('dataEdit')}
+                onPress={() => handleOptionChange('dataEdit')}
                 active={option === 'dataEdit'}
                 activeOpacity={.9}
               >
                 <OptionTitle active={option === 'dataEdit'}>Dados</OptionTitle>
               </Option>
               <Option
-                onPress={() => setOption('passwordEdit')}
+                onPress={() => handleOptionChange('passwordEdit')}
                 active={option === 'passwordEdit'}
                 activeOpacity={.9}
               >
