@@ -30,6 +30,7 @@ import { useAuth } from '../../hooks/auth';
 import { Button } from '../../components/Button';
 import { WarningModal } from '../../components/WarningModal';
 import { useNetInfo } from '@react-native-community/netinfo';
+import { api } from '../../services/api';
 
 interface ButtonProps {
   title: string;
@@ -83,10 +84,22 @@ export function Profile() {
         name: Yup.string()
           .required('Nome não pode ser vazio')
       });
-
       const data = { name, driverLicense};
       await schema.validate(data);
-      console.log(user);
+      const useUpdated = { 
+        "updated": 
+        [{
+          "_changed": "name,driver_license,photo",
+          "name": name,
+          "email": user.email,
+          "driver_license": driverLicense,
+          "photo": avatar,
+          "token": user.token
+        }]
+      };
+      if(netInfo.isConnected === true){
+        await api.post('/user/async', useUpdated);
+      }
       await updatedUser({
         id: user.id,
         email: user.email,
@@ -95,6 +108,7 @@ export function Profile() {
         photo: avatar,
         token: user.token
       });
+    
       setAlert({ title: "Aviso", message: "Perfil atualizado!", height: 170 });
       setButton([{
         title: "Fechar",
