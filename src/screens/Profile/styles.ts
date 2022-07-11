@@ -2,6 +2,7 @@ import { BorderlessButton, RectButton, TouchableOpacity, GestureHandlerRootView 
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled, { css } from 'styled-components/native';
+import FastImage from 'react-native-fast-image';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -56,7 +57,7 @@ export const PhotoContainer = styled.View`
   margin-top: 28px;
 `;
 
-export const Photo = styled.Image`
+export const Photo = styled(FastImage)`
   width: 180px;
   height: 180px;
   border-radius: 90px;

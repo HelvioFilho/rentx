@@ -195,7 +195,6 @@ export function Profile() {
     setVisible(true);
   }
 
-
   async function handlePasswordUpdate(){
     if(password === '' || newPassword === '' || newPasswordConfirm === ''){
       warnPassword("Todos os campos devem ser preenchidos!");
@@ -209,7 +208,12 @@ export function Profile() {
           "newPassword": newPassword
         }
         const {data} = await api.post('/update/pss', updatedPassword);
-        
+        if(!data.error){
+          setPassword('');
+          setNewPassword('');
+          setNewPasswordConfirm('');
+          handleOptionChange('dataEdit');
+        }
         warnPassword(data.message);
       }catch(error){
         console.log(error);
