@@ -56,7 +56,11 @@ export function Profile() {
   const [alert, setAlert] = useState({} as AlertProps);
   const [button, setButton] = useState({} as ButtonProps[]);
   const [visible, setVisible] = useState(false);
-  
+
+  const [password, setPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
+
   const theme = useTheme();
   const { goBack } = useNavigation();
   
@@ -175,6 +179,44 @@ export function Profile() {
     }
   }
 
+  function warnPassword(message: string){
+    setAlert({
+      title: "Aviso",
+      message: message,
+      height: 200,
+    });
+    setButton([
+      {
+        title: "Ok",
+        color: theme.colors.success,
+        close: true
+      },
+    ]);
+    setVisible(true);
+  }
+
+
+  async function handlePasswordUpdate(){
+    if(password === '' || newPassword === '' || newPasswordConfirm === ''){
+      warnPassword("Todos os campos devem ser preenchidos!");
+    }else if(newPassword !== newPasswordConfirm){
+      warnPassword("As senhas não são iguais!");
+    }else{
+      try{
+        const updatedPassword = {
+          "email": user.email,
+          "password": password,
+          "newPassword": newPassword
+        }
+        const {data} = await api.post('/update/pss', updatedPassword);
+        
+        warnPassword(data.message);
+      }catch(error){
+        console.log(error);
+      }
+    }
+  }
+
   return (
     <KeyboardAvoidingView
       behavior="position"
@@ -242,27 +284,37 @@ export function Profile() {
                     defaultValue={driverLicense}
                     onChangeText={setDriverLicense}
                   />
+                  <Button
+                    title="Salvar Alterações"
+                    onPress={handleProfileUpdate}
+                  />
                 </Section>
                 :
                 <Section>
                   <PasswordInput
                     iconName="lock"
                     placeholder="Senha atual"
+                    onChangeText={setPassword}
+                    value={password}
                   />
                   <PasswordInput
                     iconName="lock"
                     placeholder="Nova senha"
+                    onChangeText={setNewPassword}
+                    value={newPassword}
                   />
                   <PasswordInput
                     iconName="lock"
                     placeholder="Repetir nova senha"
+                    onChangeText={setNewPasswordConfirm}
+                    value={newPasswordConfirm}
+                  />
+                  <Button
+                    title="Salvar Senha"
+                    onPress={handlePasswordUpdate}
                   />
                 </Section>
             }
-            <Button
-              title="Salvar alterações"
-              onPress={handleProfileUpdate}
-            />
           </Content>
           <Modal
             animationType="fade"
