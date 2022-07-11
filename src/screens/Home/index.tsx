@@ -5,8 +5,6 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { synchronize } from '@nozbe/watermelondb/sync';
 
-import {Car as ModelCar} from '../../database/model/Car';
-
 import Logo from '../../assets/logo.svg';
 import { Car } from '../../components/Car';
 import { LoadAnimation } from '../../components/LoadAnimation';
@@ -45,10 +43,7 @@ export function Home() {
   async function offlineSynchronize(){
     await synchronize({
       database,
-      pullChanges: async ({lastPulledAt}) => {
-        // const {data} = await api.post(`/cars/async`);
-        // console.log(lastPulledAt);
-        // const {changes, latestVersion} = data;
+      pullChanges: async () => {
         return {changes:{}, timestamp: 1657108800};        
       },
       pushChanges: async ({changes}) => {
@@ -68,8 +63,6 @@ export function Home() {
     async function fetchCars() {
       try {
         const response = await api.get('/cars');
-        // const carCollection = database.get<ModelCar>('cars');
-        // const cars = await carCollection.query().fetch();
 
         if (isMounted) {
           setCars(response.data);
